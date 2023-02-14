@@ -15,6 +15,9 @@ public class PokemonMapper {
 
     public static Pokemon toPokemon(final PokemonDTO pokemonDTO, final PokemonSpeciesDTO pokemonSpeciesDTO, final EvolutionChainDTO evolutionChainDTO){
         try {
+            String description = (pokemonSpeciesDTO.getDescriptionDTOList().size() != 0)?
+                    pokemonSpeciesDTO.getDescriptionDTOList().get(0).getDescription()
+                    : "";
             List<Type> types = toTypes(pokemonDTO);
             List<Ability> abilities = toAbilities(pokemonDTO);
             List<Evolution> evolutions = getEvolutionChain(evolutionChainDTO);
@@ -26,8 +29,7 @@ public class PokemonMapper {
                     .withHeight(pokemonDTO.getHeight())
                     .withWeight(pokemonDTO.getWeight())
                     .withSprite(pokemonDTO.getSpriteDTO().getImage())
-                    .withDescription(pokemonSpeciesDTO.getDescriptionDTOList()
-                            .get(0).getDescription())
+                    .withDescription(description)
                     .withEvolutions(evolutions)
                     .build();
         } catch (Exception e){

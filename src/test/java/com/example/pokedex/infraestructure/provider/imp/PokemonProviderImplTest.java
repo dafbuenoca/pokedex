@@ -71,13 +71,13 @@ class PokemonProviderImplTest {
                 .withResults(pokemonDTOList)
                 .build();
         Pokemon  pokemonExpected = Sample.createPokemon();
-
+        Pageable paging = PageRequest.of(0, 20);
         when(pokeApiFeignClient.getPokemonById(anyInt())).thenReturn(pokemonDTOSample);
         when(pokeApiFeignClient.getPokemonSpeciesById(anyInt())).thenReturn(pokemonSpeciesDTO);
         when(pokeApiFeignClient.getEvolutionChainById(anyInt())).thenReturn(evolutionChainDTO);
-        when(pokeApiFeignClient.getAllPokemon()).thenReturn(pokemonListDTO);
+        when(pokeApiFeignClient.getAllPokemon((int)paging.getOffset(), paging.getPageSize())).thenReturn(pokemonListDTO);
 
-        Pageable paging = PageRequest.of(0, 20);
+
         Page page = pokemonProvider.getAllPokemon(paging);
         Pokemon pokemonActual = (Pokemon) page.getContent().get(0);
 

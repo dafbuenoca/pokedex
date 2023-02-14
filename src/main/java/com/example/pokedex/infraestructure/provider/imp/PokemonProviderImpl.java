@@ -49,19 +49,16 @@ public class PokemonProviderImpl implements PokemonProvider {
     public Page<Pokemon> getAllPokemon(Pageable paging) {
 
         log.info("Fetching all pokemon from pokeapi.co");
-        PokemonListDTO pokemonListDTOElement = pokeApiFeignClient.getAllPokemon();
+        PokemonListDTO pokemonListDTOElement = pokeApiFeignClient.getAllPokemon((int)paging.getOffset(), paging.getPageSize());
         List<PokemonDTO> pokemonListDTO =  pokemonListDTOElement.getResults();
         List<Pokemon> pokemonList = getPokemonList(paging, pokemonListDTO);
-        Page<Pokemon> pokemonPage =  new PageImpl<>(pokemonList, paging, pokemonListDTOElement.getCount());
+        Page<Pokemon> pokemonPage =  new PageImpl<>(pokemonList, paging, 1008);
         return pokemonPage;
     }
 
     private List<Pokemon> getPokemonList(Pageable paging, List<PokemonDTO> pokemonListDTO) {
         List<Pokemon> pokemonList = new ArrayList<>();
-        final int start = (int) paging.getOffset();
-        final int end = Math.min((start + paging.getPageSize()), pokemonListDTO.size());
-        Page <PokemonDTO> pokemonDTOPage = new PageImpl<>(pokemonListDTO.subList(start, end), paging, pokemonListDTO.size());
-        for (PokemonDTO pokemonDTO: pokemonDTOPage.getContent()) {
+        for (PokemonDTO pokemonDTO: pokemonListDTO) {
             pokemonList.add( getPokemon( Integer.parseInt(pokemonDTO.getUrl().split("/")[6] )));
         }
         return pokemonList;

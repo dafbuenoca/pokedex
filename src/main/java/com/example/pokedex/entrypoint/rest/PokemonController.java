@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/pokemon")
+@CrossOrigin
 @Slf4j
 public class PokemonController {
 
