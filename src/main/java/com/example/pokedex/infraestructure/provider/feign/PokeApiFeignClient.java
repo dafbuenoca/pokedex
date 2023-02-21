@@ -6,6 +6,7 @@ import com.example.pokedex.infraestructure.provider.feign.dto.EvolutionChainDTO;
 import com.example.pokedex.infraestructure.provider.feign.dto.PokemonDTO;
 import com.example.pokedex.infraestructure.provider.feign.dto.PokemonListDTO;
 import com.example.pokedex.infraestructure.provider.feign.dto.PokemonSpeciesDTO;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;

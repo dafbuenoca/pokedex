@@ -1,26 +1,32 @@
 package com.example.pokedex.infraestructure.provider.feign.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @Data
 @Builder(setterPrefix = "with")
-public class PokemonDTO {
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+public class PokemonDTO implements Serializable {
 
+    @Id
     private int id;
 
     private String name;
 
+    @OneToMany
     private List<PokemonTypeDTO> types;
 
+
     @JsonProperty("abilities")
+    @OneToMany
     private List<PokemonAbilityDTO> abilities;
 
     private String height;
@@ -30,5 +36,6 @@ public class PokemonDTO {
     private String url;
 
     @JsonProperty("sprites")
+    @OneToOne
     private SpriteDTO spriteDTO;
 }

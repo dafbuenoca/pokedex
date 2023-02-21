@@ -6,7 +6,7 @@ import com.example.pokedex.infraestructure.provider.feign.dto.EvolutionChainDTO;
 import com.example.pokedex.infraestructure.provider.feign.dto.PokemonDTO;
 import com.example.pokedex.infraestructure.provider.feign.dto.PokemonListDTO;
 import com.example.pokedex.infraestructure.provider.feign.dto.PokemonSpeciesDTO;
-import com.example.pokedex.infraestructure.provider.samples.Sample;
+import com.example.pokedex.samples.Sample;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

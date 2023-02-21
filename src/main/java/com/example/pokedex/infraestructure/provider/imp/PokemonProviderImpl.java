@@ -12,6 +12,7 @@ import com.example.pokedex.infraestructure.provider.shared.PokemonMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -32,17 +33,35 @@ public class PokemonProviderImpl implements PokemonProvider {
     public Pokemon getPokemon(Integer pokemonId) {
 
         try {
-            log.info("Fetching pokemon from pokeapi.co whit id: " + pokemonId);
-            PokemonDTO pokemonDTO = pokeApiFeignClient.getPokemonById(pokemonId);
-            log.info("Fetching pokemon species from pokeapi.co whit id: " + pokemonId);
-            PokemonSpeciesDTO pokemonSpeciesDTO = pokeApiFeignClient.getPokemonSpeciesById(pokemonId);
+            PokemonDTO pokemonDTO = getPokemonDTO(pokemonId);
+            PokemonSpeciesDTO pokemonSpeciesDTO = getPokemonSpeciesDTO(pokemonId);
             int chainEvolutionId = Integer.parseInt(pokemonSpeciesDTO.getEvolutionChainDTO().getUrl().split("/")[6]);
-            log.info("Fetching evolution chain from pokeapi.co whit id: " + chainEvolutionId);
-            EvolutionChainDTO evolutionChainDTO = pokeApiFeignClient.getEvolutionChainById(chainEvolutionId);
+            EvolutionChainDTO evolutionChainDTO = getEvolutionChainDTO(chainEvolutionId);
             return PokemonMapper.toPokemon(pokemonDTO, pokemonSpeciesDTO, evolutionChainDTO);
         } catch(Exception e){
             throw  new PokemonMapperException("holi", e);
         }
+    }
+
+    @Cacheable(value = "evolution_chains", key = "#id")
+    public EvolutionChainDTO getEvolutionChainDTO(int chainEvolutionId) {
+        log.info("Fetching evolution chain from pokeapi.co whit id: " + chainEvolutionId);
+        EvolutionChainDTO evolutionChainDTO = pokeApiFeignClient.getEvolutionChainById(chainEvolutionId);
+        return evolutionChainDTO;
+    }
+
+    @Cacheable(value = "pokemon_species", key = "#id")
+    public PokemonSpeciesDTO getPokemonSpeciesDTO(Integer pokemonId) {
+        log.info("Fetching pokemon species from pokeapi.co whit id: " + pokemonId);
+        PokemonSpeciesDTO pokemonSpeciesDTO = pokeApiFeignClient.getPokemonSpeciesById(pokemonId);
+        return pokemonSpeciesDTO;
+    }
+
+    @Cacheable(value = "pokemons", key = "#id")
+    public PokemonDTO getPokemonDTO(Integer pokemonId) {
+        log.info("Fetching pokemon from pokeapi.co whit id: " + pokemonId);
+        PokemonDTO pokemonDTO = pokeApiFeignClient.getPokemonById(pokemonId);
+        return pokemonDTO;
     }
 
     @Override

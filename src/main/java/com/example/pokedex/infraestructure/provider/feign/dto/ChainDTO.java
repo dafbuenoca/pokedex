@@ -3,6 +3,11 @@ package com.example.pokedex.infraestructure.provider.feign.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -10,8 +15,12 @@ import java.util.List;
 @Builder(setterPrefix = "with")
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChainDTO {
+@Entity
+public class ChainDTO implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     @JsonProperty("evolves_to")
     private List<EvolutionDTO> evolutionsDTO;
 

@@ -1,5 +1,5 @@
 
-package com.example.pokedex.infraestructure.provider.samples;
+package com.example.pokedex.samples;
 
 import com.example.pokedex.domain.model.Evolution;
 import com.example.pokedex.domain.model.Pokemon;
